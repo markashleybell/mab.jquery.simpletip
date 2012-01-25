@@ -16,6 +16,8 @@
         var config = {
             'toolTipId': 'tooltip',
             'toolTipClass': 'tooltip',
+            'toolTipOffsetX': 10,
+            'toolTipOffsetY': 10,
             'contentFunction': function (element) { return $(element).attr('alt'); } // A function which returns the content for our tooltip, given the element we are processing
         };
 
@@ -46,8 +48,8 @@
 
             img.bind('mouseover', function () {
                 tip.obj.html(content);
-                tip.offsetX = (tip.obj.width() + 10);
-                tip.offsetY = (tip.obj.height() + 10);
+                tip.offsetX = (tip.obj.width() + config['toolTipOffsetX']);
+                tip.offsetY = (tip.obj.height() + config['toolTipOffsetY']);
                 tip.obj.show();
             });
 
