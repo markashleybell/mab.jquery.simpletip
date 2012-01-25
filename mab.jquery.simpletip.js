@@ -11,56 +11,53 @@
 // http://www.gnu.org/licenses/gpl.html
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-(function($)
-{
-    $.fn.simpletip = function(settings)
-    {
-        var config = { 
+(function ($) {
+    $.fn.simpletip = function (settings) {
+        var config = {
             'toolTipId': 'tooltip',
             'toolTipClass': 'tooltip',
-            'toolTipWidth': 200,
-            'toolTipHeight': 50,
-            'contentFunction': function(element) { return $(element).attr('alt'); } // A function which returns the content for our tooltip, given the element we are processing
+            'contentFunction': function (element) { return $(element).attr('alt'); } // A function which returns the content for our tooltip, given the element we are processing
         };
 
         if (settings) $.extend(config, settings);
-        
-        if(!window.$_TOOLTIP_INFO)
+
+        if (!window.$_TOOLTIP_INFO)
             window.$_TOOLTIP_INFO = [];
 
         $('body').append('<div id="' + config['toolTipId'] + '" class="' + config['toolTipClass'] + '" />');
-        	
-        $_TOOLTIP_INFO[config['toolTipId']] = {
-			obj: null,
-			offsetX: 0,
-			offsetY: 0
-		};
 
-        $_TOOLTIP_INFO[config['toolTipId']].obj = $('#' + config['toolTipId']);
-        $_TOOLTIP_INFO[config['toolTipId']].obj.hide();
-        
-        this.each(function()
-        {
-			var img = $(this);
-	        var content = '<span>?</span>';
+        var tip = $_TOOLTIP_INFO[config['toolTipId']];
 
-            if(config['contentFunction'] !== undefined) 
+        tip = {
+            obj: null,
+            offsetX: 0,
+            offsetY: 0
+        };
+
+        tip.obj = $('#' + config['toolTipId']);
+        tip.obj.hide();
+
+        this.each(function () {
+            var img = $(this);
+            var content = '<span>?</span>';
+
+            if (config['contentFunction'] !== undefined)
                 content = config['contentFunction'](img);
 
-		    img.bind('mouseover', function(){
-		        $_TOOLTIP_INFO[config['toolTipId']].obj.html(content);
-		        $_TOOLTIP_INFO[config['toolTipId']].offsetX = ($_TOOLTIP_INFO[config['toolTipId']].obj.width() + 10);
-		        $_TOOLTIP_INFO[config['toolTipId']].offsetY = ($_TOOLTIP_INFO[config['toolTipId']].obj.height() + 10);
-		        $_TOOLTIP_INFO[config['toolTipId']].obj.show();
-		    });
-		        
-		    img.bind('mousemove', function(e){
-		        $_TOOLTIP_INFO[config['toolTipId']].obj.css({ 'top': (e.pageY - $_TOOLTIP_INFO[config['toolTipId']].offsetY) + 'px', 'left': (e.pageX - $_TOOLTIP_INFO[config['toolTipId']].offsetX) + 'px' });
-		    });
-		        
-		    img.bind('mouseout', function(){
-		        $_TOOLTIP_INFO[config['toolTipId']].obj.hide();
-		    });
+            img.bind('mouseover', function () {
+                tip.obj.html(content);
+                tip.offsetX = (tip.obj.width() + 10);
+                tip.offsetY = (tip.obj.height() + 10);
+                tip.obj.show();
+            });
+
+            img.bind('mousemove', function (e) {
+                tip.obj.css({ 'top': (e.pageY - tip.offsetY) + 'px', 'left': (e.pageX - tip.offsetX) + 'px' });
+            });
+
+            img.bind('mouseout', function () {
+                tip.obj.hide();
+            });
         });
 
         return this;
